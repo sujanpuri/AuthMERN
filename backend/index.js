@@ -20,6 +20,7 @@ mongoose
 // User Schema
 const userSchema = new mongoose.Schema({
   name: String,
+  email: String,
   password: String,
 });
 const User = mongoose.model("User", userSchema);
@@ -53,10 +54,10 @@ app.get('/user', authMiddleware, async (req, res) => {
 // **Register Route**
 app.post("/register", async (req, res) => {
   try {
-    const { name, password } = req.body;
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ name });
+    const { name, email, password } = req.body;
+    
+    // Check if user already exists    
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ status: false, message: "User already exists" });
     }
@@ -65,7 +66,7 @@ app.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save user
-    const newUser = new User({ name, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ status: true, message: "User registered successfully" });
@@ -79,10 +80,10 @@ app.post("/register", async (req, res) => {
 // **Login Route**
 app.post("/login", async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Find user in DB
-    const user = await User.findOne({ name });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ status: false, message: "Invalid Username" });
     }
