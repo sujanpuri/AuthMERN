@@ -24,8 +24,9 @@ app.get("/", (req, res) => {
 });
 
 // Protected Route (Only logged in User can See)
-app.get("/user", authMiddleware, user);
+app.get("/user", authMiddleware, user);   // Middleware checks the credentials. (user inputs)
 
+// Admin Route (Only Admin can see this page)
 app.get("/admin", admin)
 
 // **Register Route**
@@ -33,6 +34,7 @@ app.post("/register", register);
 
 // **Login Route**
 app.post("/login", login);
+
 app.delete('/logout', logout);
 
 // Start Server

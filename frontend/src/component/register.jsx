@@ -8,14 +8,17 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
+      //sending data using axios to backend "/register"
       const response = await axios.post(
         "http://localhost:8080/register",
         { name, email, password },
-        { withCredentials: true }
+        { withCredentials: true }   //req for transfer of cookies betn frontend & backend
       );
-      const data = response.status;
-      if (data) window.location.href = "/page";
-      alert(response.data.message);
+
+      //the data sent from the backend is stored in "response"
+      const data = response.data.status;  
+      if (data===true) window.location.href = "/page";   //directs to the "/page" after signup 
+
     } catch (error) {
       alert(error.response.data.message);
     }

@@ -10,9 +10,8 @@ const Admin = () => {
         });
 
         const data = response.data; // ✅ Correct way to get response data
-        console.log(data.status)
         if(!data.status){
-          alert(data.message)
+          alert(data.message)       //if status in the "/admin backend" is false throw it to login page.
           window.location.href="/login"
         }
       } catch (err) {

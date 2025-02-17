@@ -5,25 +5,22 @@ import Register from "./component/register";
 import Page from "./component/Page";
 import Admin from "./component/admin";
 function App() {
-  const handleClick = ()=> {
-    console.log("Clicked")
-  }
   return (
     <>
       <Router>
         <Link to="/login">
-          <p onClick={handleClick}>login</p>
+          <p>login</p>
         </Link>
         <Link to="/register">
-          <p onClick={handleClick}>register</p>
+          <p>register</p>
         </Link>
         
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/page" element={<Page /> }/>
-          <Route path="/admin" element={<Admin /> }/>
-        </Routes>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/page" element={<Page /> }/>
+            <Route path="/admin" element={<Admin /> }/>
+          </Routes>
       </Router>
     </>
   );

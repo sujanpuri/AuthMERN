@@ -5,7 +5,7 @@ const Admin = require("../Models/admin");
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body;   //gets from req body i.e: register.jsx
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -28,14 +28,14 @@ const register = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.cookie("jwt", token, {
+    res.cookie("jwt", token, {    //saves jwt in cookie with name "jwt"
       httpOnly: true,
-      maxAge: 3600000,
+      maxAge: 3600000, 
     });
 
     res
       .status(201)
-      .json({ status: true, message: "User registered successfully" });
+      .json({ status: true, message: "User registered successfully" });   //sending success message to frontend
   } catch (error) {
     console.error("❌ Error in /register:", error);
     res.status(500).json({ status: false, message: "Server error" });
@@ -51,7 +51,7 @@ const login = async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .json({ status: false, message: "Invalid Username" });
+        .json({ status: false, message: "Invalid Email!!" });
     }
 
     // Compare password
@@ -59,10 +59,10 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res
         .status(401)
-        .json({ status: false, message: "Invalid Password" });
+        .json({ status: false, message: "Invalid Password!!" });
     }
 
-    // Generate JWT Token
+    // Generate JWT Token using user._id (made by db)
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -70,19 +70,21 @@ const login = async (req, res) => {
       httpOnly: true,
       maxAge: 3600000,
     });
-    res.status(200).json({ status: true, message: "Login successful" });
+    res.json({ status: true, message: "Login successful" });
+
   } catch (error) {
     console.error("❌ Error in /login:", error);
-    res.status(500).json({ status: false, message: "Server error" });
+    res.json({ status: false, message: "Server error" });
   }
 };
 
 
 const logout = async (req, res) =>{
   try {
-    res.cookie('jwt', " ", {
+    //clears the jwt from cookie "empty string".
+    res.cookie('jwt', "", {
       httpOnly : true,
-      expires: new Date(0),
+      expires: new Date(0),   //jwt expires
     }
     )
     res.json({status: true, message: "logout successful"})
@@ -98,7 +100,7 @@ const admin = async (req, res)=>{
     const token = req.cookies.jwt;
 
     if (!token) {
-      return res.status(401).json({ status: false, message: "No token provided" });
+      return res.json({ status: false, message: "No token provided" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -108,7 +110,7 @@ const admin = async (req, res)=>{
     const user = await User.findById(jwtuser);
     
     if (!user) {
-      return res.status(404).json({ status: false, message: "User not found" });
+      return res.json({ status: false, message: "User not found" });
     }
 
     const email = user.email;
@@ -122,7 +124,7 @@ const admin = async (req, res)=>{
 
   } catch (error) {
     console.error("❌ Error in /admin:", error);
-    res.status(500).json({ status: false, message: "Server error" });
+    res.json({ status: false, message: "Server error" });
   }
 }
 

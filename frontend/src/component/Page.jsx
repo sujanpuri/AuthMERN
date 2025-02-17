@@ -5,27 +5,27 @@ const Page = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
+  // Fetching the user data on Page Load
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        // sends a GET request to fetch user data from "/user"
         const response = await axios.get("http://localhost:8080/user", {
           withCredentials: true,
         });
 
-        const data = await response.data; // ✅ Correct way to get response data
+        const data = await response.data;
 
-        if (data.status) {
+        if (data.status) {    //
           setName(data.name);
-          setEmail(data.email);
+          setEmail(data.email);   //set Db data into state.
         } else {
           alert("Session expired. Please log in again.");
-          localStorage.removeItem("token");
           window.location.href = "/login";
         }
       } catch (err) {
         console.error("❌ Error fetching user data:", err);
         alert("Error fetching user details!");
-        localStorage.removeItem("token");
         window.location.href = "/login";
       }
     };
@@ -52,9 +52,15 @@ const Page = () => {
   }
   return (
     <div>
-      Welcome {name}, email: {email}.
+      <hr/>
+      Welcome <strong>{name}</strong>, email: <strong>{email}</strong>.
+      <br/>
+      <hr/>
 
       <button onClick={handleLogOut}>Log Out</button>
+
+      <br/>
+      
     </div>
   );
 };

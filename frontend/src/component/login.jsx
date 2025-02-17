@@ -8,16 +8,13 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      console.log("login Clicked");
-
-      const response = await axios.post(
+      //sends the login data to the backend "/login"
+      const response = await axios.post(    
         "http://localhost:8080/login",
         { name, email, password },
-        { withCredentials: true }
+        { withCredentials: true }    //for cookies transfer betwn frontend & backend
       );
-      localStorage.setItem("token", response.data.token);
-      alert("Login Successful");
-      window.location.href = "/page";
+      window.location.href = "/page";   //direct the user to "/page"
     } catch (error) {
       alert(error.response.data.message);
     }
