@@ -3,6 +3,7 @@ import axios from "axios";
 
 const Page = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("")
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -15,11 +16,12 @@ const Page = () => {
     axios
       .get("http://localhost:8080/user", {
         headers: { Authorization: `Bearer ${token}` },
-      })
+      })  
       .then((response) => {
         const data = response.data;
         if (data.status) {
           setName(data.name);
+          setEmail(data.email);
         } else {
           alert("Session expired. Please log in again.");
           localStorage.removeItem("token");
@@ -34,7 +36,7 @@ const Page = () => {
 
   return (
     <div>
-      Welcome, {name}.
+      Welcome {name}, email: {email}.
     </div>
   );
 };
