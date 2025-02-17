@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Login from "./component/login";
 import Register from "./component/register";
 import Page from "./component/Page";
+import Admin from "./component/admin";
 function App() {
   const handleClick = ()=> {
     console.log("Clicked")
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/page" element={<Page /> }/>
+          <Route path="/admin" element={<Admin /> }/>
         </Routes>
       </Router>
     </>

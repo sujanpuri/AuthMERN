@@ -3,22 +3,17 @@ import axios from "axios";
 
 const Page = () => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/user", {
+          withCredentials: true,
+        });
 
-    if (!token) {
-      window.location.href = "/login"; // Redirect if no token
-      return;
-    }
+        const data = await response.data; // ✅ Correct way to get response data
 
-    axios
-      .get("http://localhost:8080/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      })  
-      .then((response) => {
-        const data = response.data;
         if (data.status) {
           setName(data.name);
           setEmail(data.email);
@@ -27,16 +22,39 @@ const Page = () => {
           localStorage.removeItem("token");
           window.location.href = "/login";
         }
-      })
-      .catch((error) => {
-        console.error("❌ Error fetching user data:", error);
+      } catch (err) {
+        console.error("❌ Error fetching user data:", err);
         alert("Error fetching user details!");
-      });
-  }, []); // Runs only once when the component mounts
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+    };
 
+    fetchUserData();
+  }, []);
+
+  const handleLogOut= async ()=>{
+    try {
+      const response = await axios.delete("http://localhost:8080/logout", {
+        withCredentials: true,
+      })
+      const data = response.status;
+      if(data){
+        alert("logout successful");
+        window.location.href="/login";
+      }else{
+        alert("Logout unsuccessfull")
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   return (
     <div>
       Welcome {name}, email: {email}.
+
+      <button onClick={handleLogOut}>Log Out</button>
     </div>
   );
 };
